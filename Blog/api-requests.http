@@ -1,0 +1,127 @@
+@baseUrl = http://localhost:5000
+@contentType = application/json
+
+### Health Check
+GET {{baseUrl}}/health
+
+### API Info
+GET {{baseUrl}}/
+
+###############################################
+### AUTHENTICATION ENDPOINTS
+###############################################
+
+### Sign Up - Create a new user
+POST {{baseUrl}}/api/auth/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "alice",
+  "email": "alice@example.com",
+  "password": "password123"
+}
+
+### Sign Up - Another user
+POST {{baseUrl}}/api/auth/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "bob",
+  "email": "bob@example.com",
+  "password": "password123"
+}
+
+### Login - Get JWT Token
+# Save the token from response and use in @token variable below
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "alice@example.com",
+  "password": "password123"
+}
+
+###############################################
+### POST ENDPOINTS
+###############################################
+
+### Create a Post (Requires Authentication)
+# Replace TOKEN with the JWT token from login response
+POST {{baseUrl}}/api/posts
+Content-Type: {{contentType}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2FiYzEyMzQ1ZjZhYmMxMjM0NWY2YSIsInVzZXJuYW1lIjoiYWxpY2UiLCJpYXQiOjE3MDEyMzQ1NjcsImV4cCI6MTcwMTgzOTM2N30.test
+
+{
+  "title": "My First Blog Post",
+  "content": "This is the content of my first blog post. It's about building APIs with Node.js and MongoDB."
+}
+
+### Create Another Post
+POST {{baseUrl}}/api/posts
+Content-Type: {{contentType}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2FiYzEyMzQ1ZjZhYmMxMjM0NWY2YSIsInVzZXJuYW1lIjoiYWxpY2UiLCJpYXQiOjE3MDEyMzQ1NjcsImV4cCI6MTcwMTgzOTM2N30.test
+
+{
+  "title": "Getting Started with Express",
+  "content": "Learn how to build RESTful APIs using Express.js. Express is a minimal and flexible Node.js web application framework."
+}
+
+### Get All Posts
+GET {{baseUrl}}/api/posts
+
+### Get Single Post
+# Replace with actual post ID from Get All Posts response
+GET {{baseUrl}}/api/posts/67abc123
+
+###############################################
+### COMMENT ENDPOINTS
+###############################################
+
+### Add Comment to Post (Requires Authentication)
+# Replace 67abc123 with actual post ID
+POST {{baseUrl}}/api/posts/67abc123/comments
+Content-Type: {{contentType}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2FiYzEyMzQ1ZjZhYmMxMjM0NWY2YSIsInVzZXJuYW1lIjoiYWxpY2UiLCJpYXQiOjE3MDEyMzQ1NjcsImV4cCI6MTcwMTgzOTM2N30.test
+
+{
+  "content": "Great post! Very informative about Express.js."
+}
+
+### Get All Comments for a Post
+# Replace 67abc123 with actual post ID
+GET {{baseUrl}}/api/posts/67abc123/comments
+
+###############################################
+### WORKFLOW GUIDE
+###############################################
+
+# 1. First, run: Sign Up request to create a user
+#    Note the userId in response
+#
+# 2. Run: Login request with the user's email/password
+#    Copy the token from response
+#
+# 3. Update the Authorization header in Create Post request
+#    Replace "Bearer TOKEN" with your actual JWT token
+#
+# 4. Run: Create a Post request
+#    Copy the post._id from response
+#
+# 5. Run: Get All Posts to see all posts with comments
+#
+# 6. Run: Add Comment to Post
+#    Replace post ID in URL with actual ID from step 4
+#    Update Authorization header with token
+#
+# 7. Run: Get Comments for Post to see all comments
+
+###############################################
+### TIPS FOR USING REST CLIENT
+###############################################
+
+# - Click "Send Request" link above each request
+# - Results appear in a preview panel
+# - Use Ctrl+Alt+R to send request
+# - Save tokens in the Authorization header for authenticated endpoints
+# - Replace {{baseUrl}} automatically with http://localhost:5000
+# - Use @token variable to store token and reference it
